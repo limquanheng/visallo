@@ -1,28 +1,9 @@
 Element Menu Plugin
 ===================
-Plugin to add new items to vertex context menu.
+* [Vertex Menu Javascript API `org.visallo.vertex.menu`](../../../javascript/org.visallo.vertex.menu.html)
+* [Edge Menu Javascript API `org.visallo.edge.menu`](../../../javascript/org.visallo.edge.menu.html)
 
 Plugin to add new items to vertex or edge context menu.
-
-## Required parameters:
-
-* label: The text to display.
-* event: The event to trigger.
-
-## Optional parameters:
-
-* shortcut: string of shortcut to show in menu. Doesn't actually listen for shortcut, just places the text in the label.
-* args: other values to pass to event handler.
-* shouldDisable: function to disable / enable the field which will receive the following arguments:
-    * `currentSelection`: object with currently selected element ids as keys and their element objects as values
-    * `vertexId`: the vertex id of the click target's corresponding vertex
-    * `edgeIds`: the edge ids of the click target's corresponding edges
-    * `element`: the DOM element target
-    * `vertex`: the corresponding vertex object of the click target
-* selection: number of how many selected items this supports.
-* options: (object)
-    * insertIntoMenuItems: function to place the item in existing items.
-
 
 ## Example
 
@@ -34,8 +15,9 @@ require([
     'util/messages'
 ], function(registry, i18n) {
 
+    //vertex menu item
     registry.registerExtension('org.visallo.vertex.menu', {
-        label: i18n('com.myplugin.menu.label'),
+        label: i18n('com.myplugin.vertex.menu.label'),
         shortcut: 'alt+i',
         event: 'searchSimilar',
         selection: 2,
@@ -46,26 +28,34 @@ require([
             }
         }
     });
+
+    //edge menu item
+    registry.registerExtension('org.visallo.edge.menu', {
+        label: i18n('com.myplugin.edge.menu.label'),
+        shortcut: 'meta-e',
+        event: 'selectConnected',
+        options: {
+            insertIntoMenuItems: function(item, items) {
+                // Add item to the end of the list
+                items.push(item);
+            }
+        }
+    });
 });
 ```
 
-To create a `shouldDisable` handler:
+To create a `shouldDisable` handler the example shown is for a vertex menu item, but the handler has the same signature for either menu.
 
 ```js
-shouldDisable: function(currentSelection, vertexId, element, vertex) {
-    // Disable this menu option if multiple vertices are selected
-    return Object.keys(currentSelection).length > 1;
+shouldDisable: function(currentSelection, elementId, domElement, element) {
+    // Disable this menu option if the vertex is not a certain type
+    return element.conceptType !== 'http://mycompany.com/sub#mySpecialConcept';
 }
 ```
 
 To add a divider:
 
 ```js
-registry.registerExtension('org.visallo.vertex.menu', 'DIVIDER');
-```
-
-To add an edge context menu item:
-
-```js
-registry.registerExtension('org.visallo.edge.menu', ...);
+registry.registerExtension('org.visallo.vertex.menu', 'DIVIDER');  // vertex menu
+registry.registerExtension('org.visallo.edge.menu', 'DIVIDER');  //edge menu
 ```
