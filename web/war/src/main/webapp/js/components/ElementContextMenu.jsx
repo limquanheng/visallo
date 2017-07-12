@@ -63,7 +63,7 @@ define([
         },
 
         render() {
-            const { items, element, elementTitle, domElement,  onMenuItemClick } = this.props;
+            const { items, element, elementTitle, domElement, onMenuItemClick } = this.props;
 
             return (
                 <ul className="dropdown-menu" role="menu">
