@@ -67,7 +67,7 @@ define([
         render() {
             return (<label>
                 <div className="display-name">{i18n(this.props.setting.displayName)}</div>
-                <input type="checkbox" disabled={this.state.disabled} value={this.state.value}
+                <input type="checkbox" disabled={this.state.disabled} checked={this.state.value}
                        onChange={this.handleCheckboxChange}/>
             </label>);
         }
