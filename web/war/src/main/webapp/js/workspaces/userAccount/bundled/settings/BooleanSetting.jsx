@@ -18,7 +18,7 @@ define([
             if (this.props.setting.uiPreferenceName) {
                 this.setState({
                     disabled: false,
-                    value: P.bool.parse(visalloData.currentUser.uiPreferences[this.props.setting.uiPreferenceName])
+                    value: P.bool.parse(visalloData.currentUser.uiPreferences[this.props.setting.uiPreferenceName], false)
                 });
             } else if (this.props.setting.getInitialValue) {
                 Promise.resolve(this.props.setting.getInitialValue())
